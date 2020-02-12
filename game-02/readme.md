@@ -21,6 +21,9 @@ Be sure to answer this question by outlining the concepts used to tackle the pro
 
 # Solución:
 
-Crear un Job que reciba las peticiones y las envíe a una pila de colas. Cuando las colas no puedan procesarse porque excede el tiempo de la ejecución o algún otro problema mediante un observador enviar una notificación con el error, puede ser un correo, al log o slack. De esta forma podremos identificar cuando haya una caída del servicio. A su vez guardar las colas que no se procesaron para poder volver a ejecutarlas cuando el servicio esté online. 
+Implementar el servicio Actuator para monitorear el estado de la api, de esta forma estaremos al tanto de si nuestro endpoint esta activo, de esta forma podremos
+activar el servicio nuevamente.
 
-Para identificar que el servicio está online, crear un cron que se ejecute cada cierto tiempo, si recibe un código 200, que se dispare un evento que ejecute las colas nuevamente.   
+También se implementaría el patrón de diseño Circuit Breaker, para evitar que la aplicación siga intentando consumir de un api que está 
+sin servicio, de esta forma se evitará el uso excesivo de los recursos. A su vez el patrón también detectará si la api esta funcionando para volver 
+a realizar peticiones.  

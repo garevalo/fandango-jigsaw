@@ -1,47 +1,42 @@
 <?php
 
+ini_set('memory_limit', '-1');
+
 declare(strictly_types = 1);
 
 class Game1 {
 
-	 public static function  calculate(array $set , int $n){
+	 public static function  calculate(array $set , int $n, $old_set = []){
 
-	 	foreach ($set as $i => $value){
+	     if($set == $old_set)
+             return "No hay coincidencias";
 
-	 	   $match = array_filter($set,function($item) use ($value,$n){
+         $old_set = !empty($old_set) ? $old_set : $set;
 
-	 	       if($value != $item){
+         $first = array_shift($set);
 
-	 	           $sum = $item + $value;
+         $sub_set = [];
 
-	 	           if($sum == $n )
-	 	               return $item;
+         foreach ($set as $i => $val) {
+             if($val + $first == $n)
+                 $sub_set = [ $first,  $val];
+         }
 
-	 	       }
+         array_push($set,$first);
 
-            });
+         if(empty($sub_set))
+             $sub_set = self::calculate( $set, $n, $old_set);
 
-	 	   if($match)
-	 	       return array_merge([$value], $match);
-	 	   else {
-
-	 	       if( count($set) == $i + 1  && empty($match)){
-                    return "No existe coincidencia";
-               } else {
-	 	           continue;
-               }
-           }
-
-        }
-
+         return $sub_set;
 	}
 }
 
 
 /** M **/
-$m = [2, 5, 8, 0, 14];
+$m = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+
 /** N* */
-$n = 7;
+$n = 47;
 
 try{
 	print_r(Game1::calculate($m,$n));
